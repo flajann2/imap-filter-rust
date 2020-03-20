@@ -7,4 +7,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+cfgrammar = "0.6.1"
 lrpar = "0.6.1"
+lrlex = "0.6.1"
+
+[build-dependencies]
+cfgrammar = "0.6.1"
+lrpar = "0.6.1"
+lrlex = "0.6.1"
