@@ -1,0 +1,14 @@
+* IMAP Filter, the Rust version                                    :TOC_5_gh:
+  - [[#introduction][Introduction]]
+  - [[#documentation][Documentation]]
+  - [[#notes][Notes]]
+    - [[#gui-support][GUI support]]
+
+** Introduction
+   
+** Documentation
+** Notes
+*** GUI support
+    Initially, we shall rely on Qt. Later, we will
+    replace it with our own GUI.
+
