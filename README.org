@@ -3,6 +3,8 @@
   - [[#documentation][Documentation]]
   - [[#notes][Notes]]
     - [[#gui-support][GUI support]]
+    - [[#old-ruby-dsl-example][Old Ruby DSL example]]
+    - [[#new-syntax-example][New Syntax example]]
 
 ** Introduction
    
@@ -11,4 +13,89 @@
 *** GUI support
     Initially, we shall rely on Qt. Later, we will
     replace it with our own GUI.
+*** Old Ruby DSL example
+    We put this here as a reference. Do we want
+    to stay with this format?
 
+    #+begin_src ruby
+# My Email accounts
+account :gmx do
+  login ENV['GMX_EMAIL'], ENV['GMX_PASS']
+  serv "imap.gmx.net"
+  ssl true
+  auth :login
+  port 993
+end
+
+account :yahoo do
+  login ENV['YAHOO_EMAIL'], ENV['YAHOO_PASS']
+  serv 'imap.mail.yahoo.com'
+  auth :login
+end
+
+account :google do
+  login ENV['GOOGLE_EMAIL'], ENV['GOOGLE_PASS']
+  serv "imap.gmail.com"
+  auth :plain
+end
+
+filter :slashdot, 'gmx:INBOX', from: 'slashdot' do
+  mark :seen
+  cp 'google:INBOX'
+  mv 'gmx:Slashdot'
+end
+
+filter :github, 'gmx:INBOX' do
+  search do
+    from 'github.com'
+    unseen
+  end
+
+  cp 'google:news/Github'
+  mv 'gmx:Github'
+end
+
+filter :gitter, 'gmx:INBOX', from: 'gitter' do
+  mv 'gmx:Gitter'
+end
+
+filter :xing, 'gmx:INBOX', from: 'xing.com' do
+  mv 'gmx:XING'
+  unmark :seen
+end
+
+filter :neat, 'yahoo:NEAT', :unseen do
+  cp 'gmx:Lists/NEAT'
+  mark :seen
+end
+
+filter :science, 'yahoo:Wissenschaft', :unseen do
+  cp 'gmx:Lists/Wissenschaft'
+  mark :seen
+end
+
+
+filter :spam, 'gmx:INBOX', from: ['news.brgmedia.com', 'travel.hoteltravel-email.com'] do
+  delete
+end
+
+activate :all
+    #+end_src
+
+*** New Syntax example
+    #+begin_src rust
+    # some comment to be ignored
+    account gmx {
+      login env:GMX_EMAIL, env:GMX_PASS
+      serv imap.gmx.net
+      ssl true
+      auth login
+      port 993
+    }
+
+    filter slashdot, gmx:INBOX, from:slashdot {
+      mark as seen
+      copy to google:INBOX
+      move to gmx:Slashdot
+    }
+    #+end_src
