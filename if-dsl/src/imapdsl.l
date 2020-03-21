@@ -4,5 +4,22 @@
 \* "*"
 \( "("
 \) ")"
+\{ "{"
+\} "}"
+\, ","
+\: ":"
+\# "#"
+account "ACC"
+login "LOGGIN"
+server "SERV"
+ssl "SSL"
+auth "AUTH"
+port "PORT"
+mark "MARK"
+copy "COPY"
+move "MOVE"
+search "SRCH"
+filter "FILT"
 [\t ]+ ;
+\#.*$ ;
 

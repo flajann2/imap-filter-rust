@@ -11,4 +11,3 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .process_file_in_src("imapdsl.l")?;
     Ok(())
 }
-

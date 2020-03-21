@@ -87,7 +87,7 @@ activate :all
     # some comment to be ignored
     account gmx {
       login env:GMX_EMAIL, env:GMX_PASS
-      serv imap.gmx.net
+      server imap.gmx.net
       ssl true
       auth login
       port 993
@@ -98,4 +98,14 @@ activate :all
       copy to google:INBOX
       move to gmx:Slashdot
     }
-    #+end_src
+
+    filter :github, 'gmx:INBOX' {
+      search {
+        from github.com
+        unseen
+      }
+    
+      cp 'google:news/Github'
+      mv 'gmx:Github'
+    }
+   #+end_src
