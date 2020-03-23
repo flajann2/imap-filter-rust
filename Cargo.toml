@@ -1,6 +1,6 @@
 [package]
 name = "imap-filter"
-version = "0.1.0"
+version = "0.0.0"
 authors = ["Fred Mitchell <fred.mitchell@gmx.de>"]
 edition = "2018"
 
@@ -8,8 +8,16 @@ edition = "2018"
 async-imap = "0.2.0"
 clap-nested = "0.3.1"
 qt_core = "0.4.1"
+cfgrammar = "0.6.1"
+lrpar = "0.6.1"
+lrlex = "0.6.1"
 
-[workspace]
-members = [
-    "if-dsl",
-]
+[build-dependencies]
+cfgrammar = "0.6.1"
+lrpar = "0.6.1"
+lrlex = "0.6.1"
+
+### [workspace]
+### members = [
+###     "if-dsl",
+### ]
