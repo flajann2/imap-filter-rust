@@ -79,6 +79,8 @@ impl ImapFilterOperation {
 
         let lexer = lexerdef.lexer(&emf);
         let (res, errs) = imapdsl_y::parse(&lexer);
+        dbg!(&res);
+        dbg!(&errs);
         for e in errs {
             println!("{}", e.pp(&lexer, &imapdsl_y::token_epp));
         }
