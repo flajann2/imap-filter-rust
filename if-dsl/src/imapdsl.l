@@ -1,5 +1,9 @@
 %%
 [0-9]+ "INT"
+[a-zA-Z]+[a-zA-Z._-]* "URI"
+[A-Za-z_]+[A_Za-z0-9_]* "VAR"
+[A-Za-z0-9]+[A_Za-z0-9_/]* "MBOX"
+[a-z] "SYM"
 \+ "+"
 \* "*"
 \( "("
@@ -9,6 +13,7 @@
 , ","
 : ":"
 \# "#"
+/ "/"
 account "ACC"
 login "LOGGIN"
 server "SERV"
@@ -18,8 +23,10 @@ port "PORT"
 mark "MARK"
 copy "COPY"
 move "MOVE"
+to "TO"
 search "SRCH"
 filter "FILT"
+env "ENV"
 [\t ]+ ;
 \#.*$ ;
 

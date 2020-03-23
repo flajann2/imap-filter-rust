@@ -105,7 +105,7 @@ activate :all
         unseen
       }
     
-      cp 'google:news/Github'
-      mv 'gmx:Github'
+      copy 'google:news/Github'
+      move 'gmx:Github'
     }
    #+end_src
