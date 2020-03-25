@@ -1,5 +1,5 @@
 %%
-[0-9]+ "INT"
+[0-9]+ "NUM"
 [a-zA-Z]+[a-zA-Z._-]* "URI"
 [A-Za-z_]+[A_Za-z0-9_]* "VAR"
 [A-Za-z0-9]+[A_Za-z0-9_/]* "MBOX"
@@ -12,8 +12,6 @@
 : ":"
 \# "#"
 / "/"
-\+ "+"
-\* "*"
 account "ACC"
 login "LOGGIN"
 server "SERV"
@@ -26,6 +24,8 @@ move "MOVE"
 to "TO"
 search "SRCH"
 filter "FILT"
+unseen "UNSEEN"
+seen "SEEN"
 env "ENV"
 [\t ]+ ;
 \#.*$ ;
