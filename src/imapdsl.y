@@ -1,33 +1,37 @@
 %start Expr
 %avoid_insert "INT"
 %%
-Expr -> Result<u64, ()>:
-      Term '+' Expr { Ok($1? + $3?) }
-    | Term { $1 }
-    ;
+Expr -> Result<Expr, ()>:
+  Term '+' Expr { Ok(Expr::Add{ span: $span, lhs: Box::new($1?), rhs: Box::new($3?) }) }
+  | Term { $1 }
+  ;
 
-Term -> Result<u64, ()>:
-      Factor '*' Term { Ok($1? * $3?) }
-    | Factor { $1 }
-    ;
+Term -> Result<Expr, ()>:
+  Factor '*' Term { Ok(Expr::Mul{ span: $span, lhs: Box::new($1?), rhs: Box::new($3?) }) }
+  | Factor { $1 }
+  ;
 
-Factor -> Result<u64, ()>:
-      '(' Expr ')' { $2 }
-    | 'INT'
-      {
-          let v = $1.map_err(|_| ())?;
-          parse_int($lexer.span_str(v.span()))
-      }
-    ;
+Factor -> Result<Expr, ()>:
+  '(' Expr ')' { $2 }
+  | 'INT' { Ok(Expr::Number{ span: $span }) }
+  ;
 %%
-// Any functions here are in scope for all the grammar actions above.
+use lrpar::Span;
 
-fn parse_int(s: &str) -> Result<u64, ()> {
-    match s.parse::<u64>() {
-        Ok(val) => Ok(val),
-        Err(_) => {
-            eprintln!("{} cannot be represented as a u64", s);
-            Err(())
-        }
+#[derive(Debug)]
+pub enum Expr {
+    Add {
+        span: Span,
+        lhs: Box<Expr>,
+        rhs: Box<Expr>,
+    },
+    Mul {
+        span: Span,
+        lhs: Box<Expr>,
+        rhs: Box<Expr>,
+    },
+    Number {
+        span: Span
     }
 }
+

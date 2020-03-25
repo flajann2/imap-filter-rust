@@ -12,6 +12,9 @@ cfgrammar = "0.6.1"
 lrpar = "0.6.1"
 lrlex = "0.6.1"
 
+[dev-dependencies] 
+gdb = "0.1.0"
+
 [build-dependencies]
 cfgrammar = "0.6.1"
 lrpar = "0.6.1"
