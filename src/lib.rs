@@ -7,13 +7,6 @@ use std::result::Result;
 use std::fs;
 use std::path::Path;
 
-use lrlex::lrlex_mod;
-use lrpar::lrpar_mod;
-
-
-lrlex_mod!("imapdsl.l");
-lrpar_mod!("imapdsl.y");
-
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum AuthType {
     Login,
@@ -74,16 +67,8 @@ impl ImapFilterOperation {
     /// TODO: Currently this will panic if the config file does not
     /// TODO: exist. Handle this properly!!!!
     fn load_configuration<P: AsRef<Path>>(mut self, path: P) -> Result<Self, String> {
-        let lexerdef = imapdsl_l::lexerdef();
         let emf = fs::read_to_string(path).unwrap();
 
-        let lexer = lexerdef.lexer(&emf);
-        let (res, errs) = imapdsl_y::parse(&lexer);
-        dbg!(&res);
-        dbg!(&errs);
-        for e in errs {
-            println!("{}", e.pp(&lexer, &imapdsl_y::token_epp));
-        }
 
         Ok(self)
     }
@@ -93,19 +78,7 @@ impl ImapFilterOperation {
 mod tests {
     use super::*;
 
-    /// This test depends on a usable sample.emf to be located in the example directory.
-    /// It will panic otherwise, as it should.
-    ///
-    /// Also, this will break on a Windows system, as they have their slashes around
-    /// the wrong way. :p
     #[test]
-    fn test_lexing() {
-        let sample_file = Path::new(file!())
-            .parent()
-            .unwrap()
-            .join("../example/sample.emf");
-        println!("defined in file: {:?}", sample_file);
-        
-        let ifo = ImapFilterOperation::new(sample_file).unwrap();
+    fn test_lua() {
     }
 }
