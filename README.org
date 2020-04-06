@@ -1,21 +1,36 @@
 * IMAP Filter, the Rust version                                    :TOC_5_gh:
   - [[#introduction][Introduction]]
   - [[#documentation][Documentation]]
+    - [[#installation][Installation]]
+    - [[#dsl-is-lua][DSL is Lua]]
   - [[#notes][Notes]]
     - [[#gui-support][GUI support]]
     - [[#old-ruby-dsl-example][Old Ruby DSL example]]
-    - [[#new-syntax-example][New Syntax example]]
+    - [[#lua-example][Lua example]]
 
 ** Introduction
-   
+   IMAP Filter is a port of RubyGem of the same name.
+   We wish to leverage Rust to do this, and also
+   to provide more features and the like.
 ** Documentation
+*** Installation
+    You must have Lua installed. On Ubuntu:
+    #+begin_src bash
+    apt install liblua5.3-dev liblua5.3-0
+    #+end_src
+*** DSL is Lua
+    We are using Lua as the DSL to implement
+    the configuration for the functioning of
+    IMAP Filter. The syntax should be close to the
+    Ruby DSL, but there will be some differences.
+
 ** Notes
 *** GUI support
     Initially, we shall rely on Qt. Later, we will
     replace it with our own GUI.
 *** Old Ruby DSL example
-    We put this here as a reference. Do we want
-    to stay with this format?
+    We put this here as a reference. We'll have
+    to decide how this looks in Lua.
 
     #+begin_src ruby
 # My Email accounts
@@ -82,30 +97,7 @@ end
 activate :all
     #+end_src
 
-*** New Syntax example
-    #+begin_src rust
-    # some comment to be ignored
-    account gmx {
-      login env:GMX_EMAIL, env:GMX_PASS
-      server imap.gmx.net
-      ssl true
-      auth login
-      port 993
-    }
-
-    filter slashdot, gmx:INBOX, from:slashdot {
-      mark as seen
-      copy to google:INBOX
-      move to gmx:Slashdot
-    }
-
-    filter :github, 'gmx:INBOX' {
-      search {
-        from github.com
-        unseen
-      }
-    
-      copy 'google:news/Github'
-      move 'gmx:Github'
-    }
-   #+end_src
+*** Lua example
+    #+begin_src lua
+    -- no code yet
+    #+end_src

@@ -1,4 +1,5 @@
-//! imap library of functions
+//! IMAP Filter library of functions
+#![warn(missing_docs)]
 
 use std::collections::HashMap;
 use std::collections::hash_map::DefaultHasher;
@@ -6,6 +7,7 @@ use std::hash::{Hash, Hasher};
 use std::result::Result;
 use std::fs;
 use std::path::Path;
+use mlua::prelude::*;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum AuthType {
