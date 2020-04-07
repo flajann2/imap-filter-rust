@@ -1,17 +1,36 @@
+//! IMAP Filter command-line application.
+
+extern crate clap_nested;
+
 use mlua::prelude::*;
+use clap::Arg;
+use clap_nested::Commander;
 
-fn main() -> LuaResult<()> {
-    let lua = Lua::new();
-    
-    let map_table = lua.create_table()?;
-    map_table.set(1, "one")?;
-    map_table.set("two", 2)?;
+use crate::command::check;
+use crate::command::run;
 
-    lua.globals().set("map_table", map_table)?;
-    lua.load(r#"require "imap-filter" "#).exec()?;
-    lua.load("for k,v in pairs(map_table) do print(k,v) end").exec()?;
-
-    Ok(())
+fn main() {
+    Commander::new()
+        .options(|app| {
+            app.arg(
+                Arg::with_name("environment")
+                    .short("e")
+                    .long("env")
+                    .global(true)
+                    .takes_value(true)
+                    .value_name("STRING")
+                    .help("Sets an environment value, defaults to \"dev\""),
+            )
+        })
+        .args(|_args, matches| matches.value_of("environment").unwrap_or("dev"))
+        .add_cmd(check::get_cmd())
+        .add_cmd(run::get_cmd())
+        .no_cmd( |_args, _matches| {
+            println!("No subcommand matched");
+            Ok(())
+        })
+        .run()
+        .unwrap();
 }
 
 #[cfg(test)]
@@ -19,6 +38,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_basic_lua() {
+    fn test_basic_lua_config_sample() {
     }
 }

@@ -1,6 +1,9 @@
 //! IMAP Filter library of functions
 #![warn(missing_docs)]
 
+#[macro_use]
+extern crate clap;
+
 use std::collections::HashMap;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
@@ -8,6 +11,8 @@ use std::result::Result;
 use std::fs;
 use std::path::Path;
 use mlua::prelude::*;
+
+pub mod command;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum AuthType {
@@ -53,6 +58,7 @@ impl Key for Filter {
 }
 
 pub struct ImapFilterOperation {
+    lua: Option<Lua>,
     script_path: String,
     im_require_path: String,
     accounts: HashMap<String, Account>,
@@ -60,21 +66,30 @@ pub struct ImapFilterOperation {
 }
 
 impl ImapFilterOperation {
-    fn new<P: AsRef<Path>>(path: P) -> Result<Self, String> {
+    fn new<P: AsRef<Path>>(path: P) -> Lua {
         let mut imf = ImapFilterOperation{
+            lua: None,
             script_path: "".to_string(),
             im_require_path: "".to_string(),
             accounts: HashMap::new(),
             filters: HashMap::new()
         };
-        imf.load_configuration(path)
+        imf.load_configuration(path).unwrap()
     }
 
     /// TODO: Currently this will panic if the config file does not
     /// TODO: exist. Handle this properly!!!!
-    fn load_configuration<P: AsRef<Path>>(mut self, path: P) -> Result<Self, String> {
+    fn load_configuration<P: AsRef<Path>>(&mut self, path: P) -> Option<Lua> {
         let emf = fs::read_to_string(path).unwrap();
+        self.lua = Some(Lua::new());
+    
+        let map_table = self.lua.unwrap().create_table()?;
+        map_table.unwrap().set(1, "one")?;
+        map_table.set("two", 2)?;
 
+        self.lua.globals().set("map_table", map_table)?;
+        self.lua.load(r#"require "imap-filter" "#).exec()?;
+        self.lua.load("for k,v in pairs(map_table) do print(k,v) end").exec()?;
 
         Ok(self)
     }

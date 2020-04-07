@@ -7,6 +7,7 @@ repository = "https://github.com/flajann2/imap-filter-rust"
 
 [dependencies]
 async-imap = "0.2"
+clap = "2.33"
 clap-nested = "0.3"
 mlua = "0.2"
 
