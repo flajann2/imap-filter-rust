@@ -1,0 +1,12 @@
+* Helper imap-filter support
+** Note Well
+   This is automatically included by 
+   imap-filter. You may modify what is
+   here to alter the DSL or to include
+   additional support automatically.
+
+   But be very weary of making changes
+   here, because you could break things. So
+   know what you are doing.
+   There be dragons here!
+
