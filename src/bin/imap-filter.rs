@@ -8,8 +8,17 @@ fn main() -> LuaResult<()> {
     map_table.set("two", 2)?;
 
     lua.globals().set("map_table", map_table)?;
-    lua.load(r#"require "imap-filter" "#)
+    lua.load(r#"require "imap-filter" "#).exec()?;
     lua.load("for k,v in pairs(map_table) do print(k,v) end").exec()?;
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_basic_lua() {
+    }
 }

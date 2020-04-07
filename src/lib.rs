@@ -53,13 +53,17 @@ impl Key for Filter {
 }
 
 pub struct ImapFilterOperation {
+    script_path: String,
+    im_require_path: String,
     accounts: HashMap<String, Account>,
-    filters: HashMap<String, Filter>
+    filters: HashMap<String, Filter>,
 }
 
 impl ImapFilterOperation {
     fn new<P: AsRef<Path>>(path: P) -> Result<Self, String> {
         let mut imf = ImapFilterOperation{
+            script_path: "".to_string(),
+            im_require_path: "".to_string(),
             accounts: HashMap::new(),
             filters: HashMap::new()
         };

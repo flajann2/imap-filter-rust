@@ -3,6 +3,7 @@ name = "imap-filter"
 version = "0.0.0"
 authors = ["Fred Mitchell <fred.mitchell@gmx.de>"]
 edition = "2018"
+repository = "https://github.com/flajann2/imap-filter-rust"
 
 [dependencies]
 async-imap = "0.2"
@@ -11,3 +12,5 @@ mlua = "0.2"
 
 [dev-dependencies] 
 gdb = "0.1.0"
+
+[build-dependencies]
