@@ -19,3 +19,4 @@ pub fn get_cmd<'a>() -> Command<'a, str> {
             Ok(())
         })
 }
+
