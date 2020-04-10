@@ -1,13 +1,13 @@
 //! IMAP Filter command-line application.
 
 extern crate clap_nested;
+extern crate imap_filter;
 
 use mlua::prelude::*;
 use clap::Arg;
 use clap_nested::Commander;
 
-use crate::command::check;
-use crate::command::run;
+use imap_filter::command::{check, run};
 
 fn main() {
     Commander::new()

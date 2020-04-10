@@ -66,7 +66,7 @@ pub struct ImapFilterOperation {
 }
 
 impl ImapFilterOperation {
-    fn new<P: AsRef<Path>>(path: P) -> Lua {
+    fn new<P: AsRef<Path>>(path: P) -> Result<ImapFilterOperation, &'static str> {
         let mut imf = ImapFilterOperation{
             lua: None,
             script_path: "".to_string(),
@@ -74,24 +74,28 @@ impl ImapFilterOperation {
             accounts: HashMap::new(),
             filters: HashMap::new()
         };
-        imf.load_configuration(path).unwrap()
+        match (imf.load_configuration(path)) {
+            Ok(lua) => Ok(imf),
+            Err(s) => Err(s)
+        }
     }
 
     /// TODO: Currently this will panic if the config file does not
     /// TODO: exist. Handle this properly!!!!
-    fn load_configuration<P: AsRef<Path>>(&mut self, path: P) -> Option<Lua> {
+    fn load_configuration<P: AsRef<Path>>(&mut self, path: P) -> Result<&Lua, &'static str> {
         let emf = fs::read_to_string(path).unwrap();
         self.lua = Some(Lua::new());
-    
-        let map_table = self.lua.unwrap().create_table()?;
-        map_table.unwrap().set(1, "one")?;
-        map_table.set("two", 2)?;
+        let mut lua = &self.lua.as_ref().unwrap();
+        let map_table = lua.create_table().unwrap();
+        
+        map_table.set(1, "one");
+        map_table.set("two", 2);
 
-        self.lua.globals().set("map_table", map_table)?;
-        self.lua.load(r#"require "imap-filter" "#).exec()?;
-        self.lua.load("for k,v in pairs(map_table) do print(k,v) end").exec()?;
+        lua.globals().set("map_table", map_table);
+        lua.load(r#"require "imap-filter" "#).exec();
+        lua.load("for k,v in pairs(map_table) do print(k,v) end").exec();
 
-        Ok(self)
+        Ok(&lua)
     }
 }
 
