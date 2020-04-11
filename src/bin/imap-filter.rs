@@ -1,4 +1,6 @@
 //! IMAP Filter command-line application.
+#[macro_use]
+extern crate clap;
 
 extern crate clap_nested;
 extern crate imap_filter;
@@ -6,31 +8,31 @@ extern crate imap_filter;
 use mlua::prelude::*;
 use clap::Arg;
 use clap_nested::Commander;
-
+use imap_filter::*;
 use imap_filter::command::{check, run};
 
-fn main() {
-    Commander::new()
-        .options(|app| {
-            app.arg(
-                Arg::with_name("environment")
-                    .short("e")
-                    .long("env")
-                    .global(true)
-                    .takes_value(true)
-                    .value_name("STRING")
-                    .help("Sets an environment value, defaults to \"dev\""),
-            )
-        })
-        .args(|_args, matches| matches.value_of("environment").unwrap_or("dev"))
-        .add_cmd(check::get_cmd())
-        .add_cmd(run::get_cmd())
-        .no_cmd( |_args, _matches| {
-            println!("No subcommand matched");
-            Ok(())
-        })
-        .run()
-        .unwrap();
+fn main() -> Result<(), &'static str> {
+    let matches = clap_app!(myapp =>
+     (version: "0.0.0")
+     (author: "Fred Mithell <fred.mitchell@gmx.de>")
+     (about: "IMAP Filter -- a client-independent way to filter your email across many accounts.")
+     (@arg CONFIG: -c --config +takes_value "config file?")
+     (@arg filter: +required "Specifies the Lua filter to use")
+     (@arg debug: -d "Turns on the debugger.")
+     (@arg trial: -t --trial "Trial (dry) run. Does not make any changes. It will log into all IMAP accounts and fail should a login fails.")
+    ).get_matches();
+
+    // Gets a value for config if supplied by user, or defaults to "default.conf"
+    let config = matches.value_of("config").unwrap_or("~/.imap_filter.conf");
+    let filter = matches.value_of("filter").unwrap();
+    let debug = matches.value_of("debug");
+    let trial = matches.value_of("trial");
+    
+    println!("Value for config: {}, and for filter {}", config, filter);
+    match ImapFilterOperation::new(filter) {
+        Ok(ifo) => ifo.run(),
+        Err(s) => Err(s)
+    }
 }
 
 #[cfg(test)]

@@ -1,4 +1,5 @@
 //! Run the lua script for imap filter
+//! TODO: Deprecated. Delete this.
 
 use clap::Arg;
 use clap_nested::Command;

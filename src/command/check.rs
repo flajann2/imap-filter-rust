@@ -1,4 +1,5 @@
 //! Command line parsing
+//! TODO: Deprecated. Delete this.
 
 extern crate clap;
 use clap::Arg;
