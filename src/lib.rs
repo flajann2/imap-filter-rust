@@ -87,15 +87,17 @@ impl ImapFilterOperation {
             Ok(emf) => {
                 self.lua = Some(Lua::new());
                 let mut lua = &self.lua.as_ref().unwrap();
-                let map_table = lua.create_table().unwrap();
-                
-                map_table.set(1, "one");
-                map_table.set("two", 2);
 
-                lua.globals().set("map_table", map_table);
                 lua.load(r#"require "imap-filter" "#).exec();
-                lua.load("for k,v in pairs(map_table) do print(k,v) end").exec();
-                Ok(&lua)
+                match lua.load(&emf).exec() {
+                    Ok(_) => {
+                        Ok(&lua)
+                    },
+                    Err(e) => {
+                        print!("err: {:?}", e);
+                        Err("Compilation error in filter script.")
+                    }
+                }
             },
             Err(s) => Err("File does not exist.")
         }
@@ -111,6 +113,15 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_lua() {
+    fn test_lua_basic_sample() {
+        match ImapFilterOperation::new("example/basic.lua") {
+            Ok(ifo) => {
+                ifo.run();
+            },
+            Err(e) => {
+                print!("err in script: {:?}", e);
+                assert!(false);
+            }
+        }
     }
 }
