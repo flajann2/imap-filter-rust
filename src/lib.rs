@@ -88,7 +88,7 @@ impl ImapFilterOperation {
                 self.lua = Some(Lua::new());
                 let mut lua = &self.lua.as_ref().unwrap();
 
-                lua.load(r#"require "imap-filter" "#).exec();
+                lua.load(r#"require "lua/imap-filter" "#).exec().unwrap();
                 match lua.load(&emf).exec() {
                     Ok(_) => {
                         Ok(&lua)
@@ -113,13 +113,13 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_lua_basic_sample() {
-        match ImapFilterOperation::new("example/basic.lua") {
+    fn test_lua_simple_sample() {
+        match ImapFilterOperation::new("example/simple.lua") {
             Ok(ifo) => {
                 ifo.run();
             },
             Err(e) => {
-                print!("err in script: {:?}", e);
+                print!("err in LUA script: {:?}", e);
                 assert!(false);
             }
         }
