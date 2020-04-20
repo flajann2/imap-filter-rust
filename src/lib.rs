@@ -15,6 +15,9 @@ use mlua::prelude::*;
 pub mod command;
 pub mod dsl;
 
+const SIMPLE: &str = "example/simple.lua";
+const LUA_HELPER: &str = r#"require "lua/imap-filter" "#;
+
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum AuthType {
     Login,
@@ -81,6 +84,11 @@ impl ImapFilterOperation {
         }
     }
 
+    /// Used for test, do not call
+    fn _lua(&mut self) -> &Lua {
+        self.lua.as_ref().unwrap()
+    }
+
     /// TODO: Currently this will panic if the config file does not
     /// TODO: exist. Handle this properly!!!!
     fn load_configuration<P: AsRef<Path>>(&mut self, path: P) -> Result<&Lua, &'static str> {
@@ -89,7 +97,8 @@ impl ImapFilterOperation {
                 self.lua = Some(Lua::new());
                 let mut lua = &self.lua.as_ref().unwrap();
 
-                lua.load(r#"require "lua/imap-filter" "#)
+                dsl::setup_dsl(lua)
+                    .load(LUA_HELPER)
                     .exec()
                     .unwrap(); // force an assertion if helper script is not found. TODO handle this case better.
                 match lua.load(&emf).exec() {
@@ -117,7 +126,7 @@ mod tests {
 
     #[test]
     fn test_lua_simple_sample() {
-        match ImapFilterOperation::new("example/simple.lua") {
+        match ImapFilterOperation::new(SIMPLE) {
             Ok(ifo) => {
                 ifo.run();
             },
