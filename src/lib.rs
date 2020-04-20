@@ -13,6 +13,7 @@ use std::path::Path;
 use mlua::prelude::*;
 
 pub mod command;
+pub mod dsl;
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub enum AuthType {
@@ -88,7 +89,9 @@ impl ImapFilterOperation {
                 self.lua = Some(Lua::new());
                 let mut lua = &self.lua.as_ref().unwrap();
 
-                lua.load(r#"require "lua/imap-filter" "#).exec().unwrap();
+                lua.load(r#"require "lua/imap-filter" "#)
+                    .exec()
+                    .unwrap(); // force an assertion if helper script is not found. TODO handle this case better.
                 match lua.load(&emf).exec() {
                     Ok(_) => {
                         Ok(&lua)
