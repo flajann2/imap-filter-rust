@@ -4,6 +4,7 @@
     - [[#installation][Installation]]
     - [[#dsl-is-lua][DSL is Lua]]
   - [[#notes][Notes]]
+    - [[#passing-a-lambda-into-a-macro][Passing a lambda into a macro]]
     - [[#command-line-example][Command Line example]]
     - [[#testing-lua][Testing Lua]]
     - [[#gui-support][GUI support]]
@@ -60,6 +61,12 @@
    not gauranteed to be in sync or up-to-date or in anyway 
    meaninful to anyone but Yours Truly, and will be 
    deleted from the master branch eventually.
+*** Passing a lambda into a macro
+    Oh, let the ugliness begin.
+    I need to pass a lambda into a macro, and there would
+    appear no clean way of doing this. So, I'll have to parse out
+    the lambda. Very ugly.
+
 *** Command Line example
     We want to preserve this example so we
     can use it later, if need be.

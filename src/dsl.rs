@@ -9,7 +9,14 @@ macro_rules! wrap_rust_fun {
     ($lua:ident, $name:ident, $funct:ident) => {{
         let lfun = $lua.create_function($funct).unwrap();
         $lua.globals().set(stringify!($name), lfun);
+        lfun
     }}
+}
+
+macro_rules! wrap_rust_lambda {
+    ($lua:ident, $lambda:expr) => {
+        $lua.create_function($lambda).unwrap()
+    }
 }
 
 fn lua_test_function(lua: &Lua, s: String) -> Result<String> {
@@ -18,7 +25,9 @@ fn lua_test_function(lua: &Lua, s: String) -> Result<String> {
 }
 
 fn lua_account(lua: &Lua, name: String) -> Result<()> {
-    Ok(())
+    println!("lua_account: {}", name);
+    lambda = wrap_rust_fun!(lua, |tr|{ println!("LAMBDA: {:?}", tr); });
+    Ok(lambda)
 }
 
 pub fn setup_dsl<'lua, 'callback>(lua: &Lua) -> &Lua {

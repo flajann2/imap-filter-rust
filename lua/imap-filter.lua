@@ -2,12 +2,12 @@
 -- Shall be automatically included for imap-filter
 print("*** imap filter support script loaded ***")
 
-function account(a)
-   print("LUA: account called.")
-   return  function(t)
-      print("LUA: ** account anonymous function called.")
-   end
-end
+-- function account(a)
+--    print("LUA: account called.")
+--    return  function(t)
+--       print("LUA: ** account anonymous function called.")
+--    end
+-- end
 
 function login(l)
    print("LUA: login called.")
