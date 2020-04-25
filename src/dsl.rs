@@ -3,13 +3,12 @@
 #![feature(unboxed_closures)]
 
 use super::*;
-use mlua::{Lua, Result};
-
+use mlua::{Lua, Result, Function};
+    
 macro_rules! wrap_rust_fun {
     ($lua:ident, $name:ident, $funct:ident) => {{
         let lfun = $lua.create_function($funct).unwrap();
         $lua.globals().set(stringify!($name), lfun);
-        lfun
     }}
 }
 
@@ -24,9 +23,12 @@ fn lua_test_function(lua: &Lua, s: String) -> Result<String> {
     Ok(s)
 }
 
-fn lua_account(lua: &Lua, name: String) -> Result<()> {
+fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     println!("lua_account: {}", name);
-    lambda = wrap_rust_fun!(lua, |tr|{ println!("LAMBDA: {:?}", tr); });
+    let lambda = wrap_rust_lambda!(lua, |_, tr: String| {
+        println!("LAMBDA_lua_account: {:?}", tr);
+        Ok(())
+    });
     Ok(lambda)
 }
 

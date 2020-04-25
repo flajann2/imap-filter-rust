@@ -131,7 +131,7 @@ mod tests {
                 ifo.run();
             },
             Err(e) => {
-                print!("err in LUA script: {:?}", e);
+                print!("ERR: err in LUA script: {:?}", e);
                 assert!(false);
             }
         }
