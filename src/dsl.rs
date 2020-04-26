@@ -3,7 +3,7 @@
 #![feature(unboxed_closures)]
 
 use super::*;
-use mlua::{Lua, Result, Function};
+use mlua::{Lua, Result, Function, Table, Value};
     
 macro_rules! wrap_rust_fun {
     ($lua:ident, $name:ident, $funct:ident) => {{
@@ -25,8 +25,12 @@ fn lua_test_function(lua: &Lua, s: String) -> Result<String> {
 
 fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     println!("lua_account: {}", name);
-    let lambda = wrap_rust_lambda!(lua, |_, tr: String| {
-        println!("LAMBDA_lua_account: {:?}", tr);
+    let lambda = wrap_rust_lambda!(lua, |_, table: Table| {
+        println!("LAMBDA_lua_account:");
+        for pair in table.pairs::<Value, Value>() {
+            let (key, value) = pair?;
+            println!("    {:?} => {:?}", key, value);
+        }
         Ok(())
     });
     Ok(lambda)
