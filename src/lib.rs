@@ -1,6 +1,12 @@
 //! IMAP Filter library of functions
 //#![warn(missing_docs)]
 
+// TODO: remove the following beofre release
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(unused_attributes)]
+
 #[macro_use]
 extern crate clap;
 
@@ -18,55 +24,54 @@ pub mod dsl;
 const SIMPLE: &str = "example/simple.lua";
 const LUA_HELPER: &str = r#"require "lua/imap-filter" "#;
 
+pub type Details = Vec<ImapTypes>;
+
 #[derive(Hash, Eq, PartialEq, Debug)]
-pub enum AuthType {
-    Login,
+pub enum AuthTypes {
     Plain,
+    Login,
+}
+
+// this supercedes what's in the lib.rs, which will eventually be deleted.
+#[derive(Hash, Eq, PartialEq, Debug)]
+pub enum MarkTypes {
+    Seen,
+    Unseen
 }
 
 #[derive(Hash, Eq, PartialEq, Debug)]
-pub enum Login {
-    NamePassword((String, String)),
-}
+pub enum ImapTypes {
+    Account(String, Details),
+    Auth(AuthTypes),
+    Login(Details),
+    User(String),
+    Password(String),
+    Serv(String),
+    TLS,
+    SSL,
+    Port(i32),
 
-#[derive(Hash, Eq, PartialEq, Debug)]
-pub enum Server {
-    URL((String, u32)), // URI and port
-}
+    Filter(String, Details),
+    Search(String, Details),
+    From(Vec<String>),
+    To(Vec<String>),
+    Cc(Vec<String>),
+    Bcc(Vec<String>),
+    Seen,
+    Unseen,
 
-/// Key for the struct
-pub trait Key {
-    fn key(&self) -> String;
-}
-    
-#[derive(Hash, Eq, PartialEq, Debug)]
-pub struct Account {
-    name: String,
-    login: Login,
-    server: Server,
-    ssl: bool,
-    auth: AuthType,
-}
-
-impl Key for Account {
-    fn key(&self) -> String { self.name.clone() }
-}
-
-#[derive(Hash, Eq, PartialEq, Debug)]
-pub struct Filter {
-    name: String,
-}
-
-impl Key for Filter {
-    fn key(&self) -> String { self.name.clone() }
+    Mark(MarkTypes),
+    Copy(Vec<String>),
+    Move(Vec<String>),
+    Delete,
 }
 
 pub struct ImapFilterOperation {
     lua: Option<Lua>,
     script_path: String,
     im_require_path: String,
-    accounts: HashMap<String, Account>,
-    filters: HashMap<String, Filter>,
+    accounts: Details,
+    filters: Details,
 }
 
 impl ImapFilterOperation {
@@ -75,8 +80,8 @@ impl ImapFilterOperation {
             lua: None,
             script_path: "".to_string(),
             im_require_path: "".to_string(),
-            accounts: HashMap::new(),
-            filters: HashMap::new()
+            accounts: Details::new(),
+            filters: Details::new()
         };
         match imf.load_configuration(path) {
             Ok(lua) => Ok(imf),

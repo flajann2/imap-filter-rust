@@ -4,7 +4,8 @@
 
 use super::*;
 use mlua::{Lua, Result, Function, Table, Value};
-    
+use std::vec::*;
+
 macro_rules! wrap_rust_fun {
     ($lua:ident, $name:ident, $funct:ident) => {{
         let lfun = $lua.create_function($funct).unwrap();

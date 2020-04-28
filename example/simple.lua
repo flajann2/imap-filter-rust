@@ -16,6 +16,5 @@ filter "github"
       from 'github.com',
       unseen,
    },
- 
    move 'gmx:Github'
 }

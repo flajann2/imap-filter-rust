@@ -1,4 +1,11 @@
 //! IMAP Filter command-line application.
+
+// TODO: remove the following beofre release
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(unused_attributes)]
+
 #[macro_use]
 extern crate clap;
 
