@@ -20,6 +20,7 @@ use mlua::prelude::*;
 
 pub mod command;
 pub mod dsl;
+pub mod lua_to_rust_conversion;
 
 const SIMPLE: &str = "example/simple.lua";
 const LUA_HELPER: &str = r#"require "lua/imap-filter" "#;
