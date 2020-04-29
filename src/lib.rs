@@ -71,6 +71,7 @@ pub struct ImapFilterOperation {
     lua: Option<Lua>,
     script_path: String,
     im_require_path: String,
+    lspec: Details,
     accounts: Details,
     filters: Details,
 }
@@ -81,6 +82,7 @@ impl ImapFilterOperation {
             lua: None,
             script_path: "".to_string(),
             im_require_path: "".to_string(),
+            lspec: Details::new(),
             accounts: Details::new(),
             filters: Details::new()
         };
@@ -132,6 +134,19 @@ mod tests {
 
     #[test]
     fn test_lua_simple_sample() {
+        match ImapFilterOperation::new(SIMPLE) {
+            Ok(ifo) => {
+                ifo.run();
+            },
+            Err(e) => {
+                print!("ERR: err in LUA script: {:?}", e);
+                assert!(false);
+            }
+        }
+    }
+    
+    #[test]
+    fn test_lua_to_rust_conversion() {
         match ImapFilterOperation::new(SIMPLE) {
             Ok(ifo) => {
                 ifo.run();

@@ -37,9 +37,23 @@ fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     Ok(lambda)
 }
 
+fn lua_filter(lua: &Lua, name: String) -> Result<Function> {
+    println!("lua_filter: {}", name);
+    let lambda = wrap_rust_lambda!(lua, |_, table: Table| {
+        println!("LAMBDA_lua_filter:");
+        for pair in table.pairs::<Value, Value>() {
+            let (key, value) = pair?;
+            println!("    {:?} => {:?}", key, value);
+        }
+        Ok(())
+    });
+    Ok(lambda)
+}
+
 pub fn setup_dsl<'lua, 'callback>(lua: &Lua) -> &Lua {
     wrap_rust_fun!(lua, test_function, lua_test_function);
     wrap_rust_fun!(lua, account, lua_account);
+    wrap_rust_fun!(lua, filter, lua_filter);
     &lua
 }
 

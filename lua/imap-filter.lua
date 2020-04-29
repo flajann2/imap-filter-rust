@@ -41,18 +41,19 @@ function env(f)
    return f
 end
 
--- filter
-function filter(f)
-   print("LUA: filter called: ", f)
-   return  function(t)
-      print("LUA: ** filter anonymous function called.")
-   end
-end
+-- -- filter
+-- function filter(f)
+--    print("LUA: filter called: ", f)
+--    return  function(t)
+--       print("LUA: ** filter anonymous function called.")
+--    end
+-- end
 
 function search(s)
    print("LUA: search called:", s)
    return  function(t)
-      print("LUA: ** search anonymous function called.")
+      print("LUA: ** search anonymous function called for ", s)
+      return t
    end
 end
 
