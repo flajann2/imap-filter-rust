@@ -103,9 +103,9 @@ impl ImapFilterOperation {
         match fs::read_to_string(path) {
             Ok(emf) => {
                 self.lua = Some(Lua::new());
-                let mut lua = &self.lua.as_ref().unwrap();
+                let lua = &self.lua.as_ref().unwrap();
 
-                dsl::setup_dsl(lua)
+                dsl::setup_dsl(self, lua)
                     .load(LUA_HELPER)
                     .exec()
                     .unwrap(); // force an assertion if helper script is not found. TODO handle this case better.

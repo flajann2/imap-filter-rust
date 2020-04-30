@@ -50,7 +50,7 @@ fn lua_filter(lua: &Lua, name: String) -> Result<Function> {
     Ok(lambda)
 }
 
-pub fn setup_dsl<'lua, 'callback>(lua: &Lua) -> &Lua {
+pub fn setup_dsl<'lua, 'callback>(ifo: &ImapFilterOperation, lua: &'lua Lua) -> &'lua Lua {
     wrap_rust_fun!(lua, test_function, lua_test_function);
     wrap_rust_fun!(lua, account, lua_account);
     wrap_rust_fun!(lua, filter, lua_filter);
