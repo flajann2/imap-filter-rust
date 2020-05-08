@@ -36,10 +36,10 @@ function port(p)
    return p
 end
 
-function env(f)
-   print("LUA: env called:", f)
-   return f
-end
+-- function env(f)
+--    print("LUA: env called:", f)
+--    return f
+-- end
 
 -- -- filter
 -- function filter(f)

@@ -1,5 +1,5 @@
-//! As the name suggests, conversion between Lua and Rust
-//! data structures.
+//! As the name suggests, conversion between Lua tables and Rust
+//! data structures. We do this recursively, of course.
 
 // TODO: remove the following beofre release
 #![allow(dead_code)]
@@ -14,4 +14,3 @@ pub fn toRust(ltable: &Table) -> Details {
     let mut det = Details::new();
     det
 }
-
