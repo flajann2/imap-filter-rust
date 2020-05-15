@@ -37,6 +37,15 @@ fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     Ok(lambda)
 }
 
+fn lua_login(lua: &Lua, table: Table) -> Result<String> {
+    println!("lua_login:");
+    for pair in table.pairs::<Value, Value>() {
+        let (key, value) = pair?;
+        println!("    {:?} => {:?}", key.unwrap(), value);
+    }
+    Ok("whaaa".to_string())
+}
+
 fn lua_env(lua: &Lua, key: String) -> Result<String> {
     println!("lua_env: {}", key);
     match env::var_os(key) {
@@ -62,6 +71,7 @@ pub fn setup_dsl<'lua, 'callback>(ifo: &ImapFilterOperation, lua: &'lua Lua) -> 
     wrap_rust_fun!(lua, test_function, lua_test_function);
 
     wrap_rust_fun!(lua, account, lua_account);
+    wrap_rust_fun!(lua, login, lua_login);
     wrap_rust_fun!(lua, env, lua_env);
 
     wrap_rust_fun!(lua, filter, lua_filter);

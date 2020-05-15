@@ -9,12 +9,12 @@ print("*** imap filter support script loaded ***")
 --    end
 -- end
 
-function login(l)
-   print("LUA: login called:", l)
-   return  function(t)
-      print("LUA: ** login anonymous function called.")
-   end
-end
+-- function login(l)
+--    print("LUA: login called:", l)
+--    return  function(t)
+--       print("LUA: ** login anonymous function called.")
+--    end
+-- end
 
 function serv(s)
    print("LUA: serv called:", s)
