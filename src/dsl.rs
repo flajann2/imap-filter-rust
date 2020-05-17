@@ -41,7 +41,7 @@ fn lua_login(lua: &Lua, table: Table) -> Result<String> {
     println!("lua_login:");
     for pair in table.pairs::<Value, Value>() {
         let (key, value) = pair?;
-        println!("    {:?} => {:?}", key.unwrap(), value);
+        println!("    {:?} => {:?}", key, value);
     }
     Ok("whaaa".to_string())
 }

@@ -6,7 +6,7 @@
   - [[#notes][Notes]]
     - [[#command-line-example][Command Line example]]
     - [[#testing-lua][Testing Lua]]
-    - [[#gui-support][GUI support]]
+    - [[#tui-support][TUI support]]
     - [[#examples][Examples]]
       - [[#lua-dsl-example][Lua DSL example]]
 
@@ -145,7 +145,7 @@ fn old_main() {
 }
     #+end_src
 
-*** TODO GUI support
+*** TODO TUI support
     not yet.
 *** Examples
 **** Lua DSL example
