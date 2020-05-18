@@ -37,11 +37,18 @@ fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     Ok(lambda)
 }
 
+//fn lua_str_to_str() -> Str
 fn lua_login(lua: &Lua, table: Table) -> Result<String> {
     println!("lua_login:");
     for pair in table.pairs::<Value, Value>() {
         let (key, value) = pair?;
-        println!("    {:?} => {:?}", key, value);
+        if let Value::String(k) = key {
+            if let Value::String(v) = value {
+                println!("    {:?} => {:?}",
+                       k.to_str()?,
+                       v.to_str()?);
+            }
+        }
     }
     Ok("whaaa".to_string())
 }
