@@ -7,7 +7,7 @@
     - [[#command-line-example][Command Line example]]
     - [[#testing-lua][Testing Lua]]
     - [[#tui-support][TUI support]]
-    - [[#building-for-the-raspberry-pi][Building for the Raspberry Pi]]
+    - [[#cross-compiling-for-the-raspberry-pi][Cross-compiling for the Raspberry Pi]]
     - [[#examples][Examples]]
       - [[#lua-dsl-example][Lua DSL example]]
 
@@ -148,7 +148,7 @@ fn old_main() {
 
 *** TODO TUI support
     not yet.
-*** Building for the Raspberry Pi
+*** Cross-compiling for the Raspberry Pi
     Have not verified this to work yet.
     #+begin_src bash
     cargo build --target=armv7-unknown-linux-gnueabihf
@@ -160,6 +160,13 @@ fn old_main() {
     apt install gcc-10-multilib-arm-linux-gnueabihf
     #+end_src
 
+    It turns out that this is a more involved issue than
+    I originally thought, as some libraries may have to be 
+    cross-compiled by hand. Is it really worth doing that?
+    Would it not be easier just to compile it on the Pi?
+    This is not going into a major CI/CD pipeline, ever.
+
+    So this effort will be set aside for now.
 *** Examples
 **** Lua DSL example
      Note that secrets are stored in environment variables,
