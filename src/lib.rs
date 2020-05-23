@@ -10,12 +10,17 @@
 #[macro_use]
 extern crate clap;
 
-use std::collections::HashMap;
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
-use std::result::Result;
-use std::fs;
-use std::path::Path;
+use std::collections::{HashMap,
+                       hash_map::DefaultHasher};
+use std::hash::{Hash,
+                Hasher};
+
+use std::{result::Result,
+          fs,
+          path::Path,
+          cell::RefCell,
+          thread};
+
 use mlua::prelude::*;
 
 pub mod command;
@@ -76,8 +81,13 @@ pub struct ImapFilterOperation {
     filters: Details,
 }
 
-impl ImapFilterOperation {
-    pub fn new<P: AsRef<Path>>(path: P) -> Result<ImapFilterOperation, &'static str> {
+
+thread_local!(pub static IFO: RefCell<Option<ImapFilterOperation>> = RefCell::new(None));
+
+impl ImapFilterOperation {   
+    /// Creates a new ImapFilterOperation, which is also cached
+    /// in the thread as TLS, only one allowed per (Rust) thread.
+    pub fn init<P: AsRef<Path>>(path: P) -> Result<(), &'static str> {
         let mut imf = ImapFilterOperation{
             lua: None,
             script_path: "".to_string(),
@@ -86,9 +96,13 @@ impl ImapFilterOperation {
             accounts: Details::new(),
             filters: Details::new()
         };
+        
         match imf.load_configuration(path) {
-            Ok(lua) => Ok(imf),
-            Err(s) => Err(s)
+            Ok(lua) => {
+                IFO.with(|ifo| *ifo.borrow_mut() = Some(imf));
+                Ok(())
+            },
+            Err(s) => Err(s),
         }
     }
 
@@ -134,9 +148,12 @@ mod tests {
 
     #[test]
     fn test_lua_simple_sample() {
-        match ImapFilterOperation::new(SIMPLE) {
-            Ok(ifo) => {
-                ifo.run();
+        match ImapFilterOperation::init(SIMPLE) {
+            Ok(()) => {
+                IFO.with( |ifo| {
+                    let b = &*ifo.borrow();
+                    b.as_ref().unwrap().run();
+                })
             },
             Err(e) => {
                 print!("ERR: err in LUA script: {:?}", e);
@@ -147,9 +164,12 @@ mod tests {
     
     #[test]
     fn test_lua_to_rust_conversion() {
-        match ImapFilterOperation::new(SIMPLE) {
-            Ok(ifo) => {
-                ifo.run();
+        match ImapFilterOperation::init(SIMPLE) {
+            Ok(()) => {
+                IFO.with( |ifo| {
+                    let b = &*ifo.borrow();
+                    b.as_ref().unwrap().run();
+                })
             },
             Err(e) => {
                 print!("ERR: err in LUA script: {:?}", e);

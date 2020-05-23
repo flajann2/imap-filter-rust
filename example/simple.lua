@@ -2,9 +2,7 @@
 -- GMX account
 --
 -- for testing:
--- export GMX_EMAIL="fred@bullshit.com" \
---  && export GMX_PASS="123456" \
---  && ~/.cargo/bin/cargo test -- --nocapture
+-- export GMX_EMAIL="bugsbunny@noemailhere.com" && export GMX_PASS="123456" && ~/.cargo/bin/cargo test -- --nocapture
 
 account "gmx"
 {

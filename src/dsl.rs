@@ -77,7 +77,7 @@ fn lua_filter(lua: &Lua, name: String) -> Result<Function> {
 pub fn setup_dsl<'lua, 'callback>(ifo: &ImapFilterOperation, lua: &'lua Lua) -> &'lua Lua {
     wrap_rust_fun!(lua, test_function, lua_test_function);
 
-    wrap_rust_fun!(lua, account, || );
+    wrap_rust_fun!(lua, account, lua_account);
     wrap_rust_fun!(lua, login, lua_login);
     wrap_rust_fun!(lua, env, lua_env);
 
@@ -91,8 +91,10 @@ mod tests {
 
     #[test]
     fn test_setup_dsl() {
-        match ImapFilterOperation::new(SIMPLE) {
-            Ok(mut ifo) => {
+        match ImapFilterOperation::init(SIMPLE) {
+            Ok(()) => IFO.with( |_ifo| {
+                let b = *_ifo.borrow_mut();
+                let ifo = b.as_ref().unwrap();
                 let lua = ifo._lua();
                 match lua.load(r#"test_function("Hello World to Rust")"#)
                     .exec() {
@@ -103,7 +105,8 @@ mod tests {
                         },
                     }
                 ifo.run();
-            },
+            }),
+
             Err(e) => {
                 print!("err in LUA script: {:?}", e);
                 assert!(false);

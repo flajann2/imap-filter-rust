@@ -36,9 +36,15 @@ fn main() -> Result<(), &'static str> {
     let trial = matches.value_of("trial");
     
     println!("Value for config: {}, and for filter {}", config, filter);
-    match ImapFilterOperation::new(filter) {
-        Ok(ifo) => ifo.run(),
-        Err(s) => Err(s)
+    match ImapFilterOperation::init(filter) {
+        Ok(()) => {
+            IFO.with( |ifo| {
+                let b = &*ifo.borrow();
+                b.as_ref().unwrap().run();
+            });
+            Ok(())
+        },
+        Err(s) => Err(s),
     }
 }
 
