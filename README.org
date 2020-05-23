@@ -149,7 +149,9 @@ fn old_main() {
 *** TODO TUI support
     not yet.
 *** Cross-compiling for the Raspberry Pi
-    Have not verified this to work yet.
+    This breaks because it requires openssl to be
+    cross-compiled first, and there appears to be nothing
+    pre-setup for it in apt.
     #+begin_src bash
     cargo build --target=armv7-unknown-linux-gnueabihf
     #+end_src
