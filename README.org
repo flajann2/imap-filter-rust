@@ -8,6 +8,7 @@
     - [[#testing-lua][Testing Lua]]
     - [[#tui-support][TUI support]]
     - [[#cross-compiling-for-the-raspberry-pi][Cross-compiling for the Raspberry Pi]]
+    - [[#musl-and-snap-support][MUSL and Snap support]]
     - [[#examples][Examples]]
       - [[#lua-dsl-example][Lua DSL example]]
 
@@ -58,8 +59,8 @@
 
 ** Personal Notes (Nothing to see here. Move it along.)
    These are my personal notes on this project. They are
-   not gauranteed to be in sync or up-to-date or in anyway 
-   meaninful to anyone but Yours Truly, and will be 
+   not guaranteed to be in sync or up-to-date or in anyway 
+   meaningful to anyone but Yours Truly, and will be 
    deleted from the master branch eventually.
 *** Command Line example
     We want to preserve this example so we
@@ -71,7 +72,7 @@ fn main() {
      (author: "Fred Mithell <fred.mitchell@gmx.de>")
      (about: "IMAP Filter -- a client-independent way to filter your email across many accounts.")
      (@arg CONFIG: -c --config +takes_value "config file?")
-     (@arg INPUT: +required "Sppecifies the Lua filter to use")
+     (@arg INPUT: +required "Specifies the Lua filter to use")
      (@arg debug: -d ... "Sets the level of debugging information")
      (@arg debug: -t --trial "Trial run. Do not make")
      
@@ -169,6 +170,31 @@ fn old_main() {
     This is not going into a major CI/CD pipeline, ever.
 
     So this effort will be set aside for now.
+*** MUSL and Snap support
+    Since I intend to distribute this for all Linux
+    platforms (for now), I wish to make this work with
+    Snap, and also MUSL
+
+    To build with MUSL:
+    #+begin_src fish
+    cargo build --target x86_64-unknown-linux-musl
+    #+end_src
+
+    Testing the snap
+    #+begin_src fish
+    sudo snap install --devmode --dangerous *.snap
+    snap list
+    #+end_src
+
+    Publishing the snap
+    #+begin_src fish
+    snapcraft login
+    snapcraft push --release edge *.snap
+    #+end_src
+
+    See:
+    https://snapcraft.io/docs/rust-applications
+
 *** Examples
 **** Lua DSL example
      Note that secrets are stored in environment variables,

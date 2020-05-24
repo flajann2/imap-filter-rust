@@ -2,6 +2,14 @@
 //! All the callbacks are implemented here.
 #![feature(unboxed_closures)]
 
+// TODO: remove the following beofre release
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
+#![allow(unused_attributes)]
+#![allow(unused_must_use)]
+#![allow(unused_mut)]
+
 use super::*;
 use mlua::{Lua, Result, Function, Table, Value, Error::*};
 use std::{vec::*, env};
@@ -93,7 +101,7 @@ mod tests {
     fn test_setup_dsl() {
         match ImapFilterOperation::init(SIMPLE) {
             Ok(()) => IFO.with( |_ifo| {
-                let b = *_ifo.borrow_mut();
+                let b = &*_ifo.borrow();
                 let ifo = b.as_ref().unwrap();
                 let lua = ifo._lua();
                 match lua.load(r#"test_function("Hello World to Rust")"#)

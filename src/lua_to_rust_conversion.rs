@@ -10,7 +10,7 @@
 use super::*;
 use mlua::{Lua, Result, Function, Table, Value};
 
-pub fn toRust(ltable: &Table) -> Details {
+pub fn to_rust(ltable: &Table) -> Details {
     let mut det = Details::new();
     det
 }

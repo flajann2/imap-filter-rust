@@ -1,0 +1,33 @@
+name: imap-filter
+version: '0.0.0'
+summary: A fully-scriptable IMAP mail filter written in Rust.
+description: |
+  IMAP Filter allows you to, in a mail-client independent
+  fashion, filter your email across any number of IMAP
+  email accounts. You can, for example, automatically
+  transfer email from a particular source on one IMAP
+  account to the folder of another account, while remaining
+  independent of whatever email client you use.
+
+  If you want to, at some point, which to switch from
+  using Outlook to Thunderbird, you can without having
+  to redo all your mail filters.
+
+  IMAP filter uses an easy to learn DSL implemented
+  in LUA to accomplish this. As such, you may actually
+  add LUA plugins to the mix, if you so desire.
+
+  For our version numbers, we abide by the principles
+  of semantic versioning.
+
+confinement: devmode
+base: core18
+
+parts:
+  imap-filter:
+    plugin: rust
+    source: https://github.com/flajann2/imap-filter-rust.git
+
+apps:
+  imap-filter:
+    command: bin/imap-filter

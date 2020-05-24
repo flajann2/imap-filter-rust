@@ -6,6 +6,8 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unused_attributes)]
+#![allow(unused_must_use)]
+#![allow(unused_mut)]
 
 #[macro_use]
 extern crate clap;
