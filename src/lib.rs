@@ -83,7 +83,6 @@ pub struct ImapFilterOperation {
     filters: Details,
 }
 
-
 thread_local!(pub static IFO: RefCell<Option<ImapFilterOperation>> = RefCell::new(None));
 
 impl ImapFilterOperation {   
@@ -108,7 +107,7 @@ impl ImapFilterOperation {
         }
     }
 
-    /// Used for test, do not call
+    /// Used for testing only, DO NOT CALL
     fn _lua(&self) -> &Lua {
         self.lua.as_ref().unwrap()
     }

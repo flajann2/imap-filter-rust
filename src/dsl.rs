@@ -36,12 +36,21 @@ fn lua_account(lua: &Lua, name: String) -> Result<Function> {
     println!("lua_account: {}", name);
     let lambda = wrap_rust_lambda!(lua, |ll: &Lua, table: Table| {
         println!("LAMBDA_lua_account:");
-        for pair in table.pairs::<Value, Value>() {
-            let (key, value) = pair?;
-            println!("    {:?} => {:?}", key, value);
-        }
+        IFO.with( |_ifo| {
+            let _b = _ifo.borrow(); // done this way to extend the lifetime
+            let _oifo = _b.as_ref();
+            println!("#### {:?}", _oifo);
+            match _oifo {
+                Some(ref ifo) => {
+                    let pass: Result::<String> = table.get("pass");
+                    let user: Result::<String> = table.get("user");
+                    println!("    {:?} => {:?}", user, pass);
+                },
+                _ => assert!(false),
+            }
+        });
         Ok(())
-    });
+    });    
     Ok(lambda)
 }
 
@@ -116,7 +125,10 @@ mod tests {
                             }
                         ifo.run();
                     },
-                    None => assert!(false),
+                    None => {
+                        println!("IFO failed setup.");
+                        assert!(false);
+                    },
                 }
             }),
 
