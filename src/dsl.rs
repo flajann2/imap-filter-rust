@@ -101,18 +101,23 @@ mod tests {
     fn test_setup_dsl() {
         match ImapFilterOperation::init(SIMPLE) {
             Ok(()) => IFO.with( |_ifo| {
-                let b = &*_ifo.borrow();
-                let ifo = b.as_ref().unwrap();
-                let lua = ifo._lua();
-                match lua.load(r#"test_function("Hello World to Rust")"#)
-                    .exec() {
-                        Ok(r) => println!("RTEST: {:?}", r),
-                        Err(e) => {
-                            println!("RERR: {:?}", e);
-                            assert!(false);
-                        },
-                    }
-                ifo.run();
+                let _b = _ifo.borrow(); // done this way to extend the lifetime
+                let _oifo = _b.as_ref();
+                match _oifo {
+                    Some(ref ifo) => {
+                        let lua = ifo._lua();
+                        match lua.load(r#"test_function("Hello World to Rust")"#)
+                            .exec() {
+                                Ok(r) => println!("RTEST: {:?}", r),
+                                Err(e) => {
+                                    println!("RERR: {:?}", e);
+                                    assert!(false);
+                                },
+                            }
+                        ifo.run();
+                    },
+                    None => assert!(false),
+                }
             }),
 
             Err(e) => {

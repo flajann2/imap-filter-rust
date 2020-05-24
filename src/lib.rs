@@ -109,7 +109,7 @@ impl ImapFilterOperation {
     }
 
     /// Used for test, do not call
-    fn _lua(&mut self) -> &Lua {
+    fn _lua(&self) -> &Lua {
         self.lua.as_ref().unwrap()
     }
 
