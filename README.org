@@ -37,7 +37,7 @@
     have an earlier version of Lua installed on your (presumably Linux)
     system. In which case, do the following:
 
-    #+being_src bash
+    #+begin_src bash
     # installation for a Unix-like system (Linux or macOS, etc.)
     wget https://luarocks.org/releases/luarocks-3.3.0.tar.gz
     tar zxpf luarocks-3.3.0.tar.gz

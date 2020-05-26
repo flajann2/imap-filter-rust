@@ -39,7 +39,6 @@ fn lua_account(lua: &Lua, name: String) -> Result<Function> {
         IFO.with( |_ifo| {
             let _b = _ifo.borrow(); // done this way to extend the lifetime
             let _oifo = _b.as_ref();
-            println!("#### {:?}", _oifo);
             match _oifo {
                 Some(ref ifo) => {
                     let pass: Result::<String> = table.get("pass");
